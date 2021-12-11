@@ -1,5 +1,7 @@
 import react, { Component } from 'react';
-import { Media } from 'reactstrap';
+import { Card, CardImg, CardImgOverlay, CardBody, CardText, CardTitle } from 'reactstrap';
+import DishDetail from './dishdetailcomponent';
+
 class Menu extends Component {
 
     constructor(props) {
@@ -8,77 +10,63 @@ class Menu extends Component {
         //state stores property of the components that we can use later
         this.state = {
             //we define dish which is an array of js objects
-            dishes: [
-                {
-                    id: 0,
-                    name: 'Uthappizza',
-                    image: 'assets/images/uthappizza.png',
-                    category: 'mains',
-                    label: 'Hot',
-                    price: '4.99',
-                    description: 'A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.'
-                },
-                {
-                    id: 1,
-                    name: 'Zucchipakoda',
-                    image: 'assets/images/zucchipakoda.png',
-                    category: 'appetizer',
-                    label: '',
-                    price: '1.99',
-                    description: 'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce'
-                },
-                {
-                    id: 2,
-                    name: 'Vadonut',
-                    image: 'assets/images/vadonut.png',
-                    category: 'appetizer',
-                    label: 'New',
-                    price: '1.99',
-                    description: 'A quintessential ConFusion experience, is it a vada or is it a donut?'
-                },
-                {
-                    id: 3,
-                    name: 'ElaiCheese Cake',
-                    image: 'assets/images/elaicheesecake.png',
-                    category: 'dessert',
-                    label: '',
-                    price: '2.99',
-                    description: 'A delectable, semi-sweet New York Style Cheese Cake, with Graham cracker crust and spiced with Indian cardamoms'
-                }
-            ],
-
+            selectedDish: null
         }
+        
+        console.log('Constructor Invoked');
+    }
+
+    componentDidMount() {
+        console.log('component did mount was invoked');
+    }
+
+    onDishSelect(dish) {
+        this.setState({ selectedDish: dish });
+    }
+
+    renderMenuDish() {
+        const menu = this.props.dishes.map((dish) => { //iterting over every dish and storing it in menu
+            return (
+                <div key={dish.id} className="col-12 col-md-5 m-1">
+
+                    <Card onClick={() => this.onDishSelect(dish)}>
+
+                        <CardImg width="100%" src={dish.image} alt={dish.name} />
+
+                        <CardImgOverlay className="ml-5">
+                            <CardTitle className="">{dish.name}</CardTitle>
+                        </CardImgOverlay>
+                    </Card>
+
+                </div>
+            );
+        }
+        
+        );
+        console.log("RenderMenuDish is invoked");
+        return menu;
     }
 
     render() {
 
-        const menu = this.state.dishes.map((dish) => { //iterting over every dish and storing it in menu
-            return (
-                <div key={dish.id} className="col-12 mt-5">
-
-                    <Media tag="li">
-                        <Media left-middle>
-                            <Media object src={dish.image} alt={dish.name} />
-                        </Media>
-                        <Media body className="ml-5">
-                            <Media heading className="">{dish.name}</Media>
-                            <p>{dish.description}</p>
-                        </Media>
-                    </Media>
-
-                </div>
-            );
-        });
-
+        const Menu = this.renderMenuDish();
+        console.log(typeof(Menu));
         return (
             <div className="container">
                 <div className="row">
-                    <Media list>
-                        {menu}
-                    </Media>
+                    {Menu}
                 </div>
+                <DishDetail dish={this.state.selectedDish} comments= {this.state.selectDish}/>
             </div>
         );
+
+
+
+    }
+
+    componentDidMount(){
+        console.log('Menu component componentDidMounbt is invoked');
+        
     }
 }
 export default Menu;
